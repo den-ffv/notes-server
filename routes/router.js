@@ -1,9 +1,11 @@
 import { Router } from "express";
-const router = new Router();
 import controller from "../authController.js";
 import { check } from "express-validator";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
+import notesController from "../notesController.js";
+
+const router = new Router();
 router.post(
   "/registration",
   [
@@ -16,6 +18,11 @@ router.post(
   controller.registration
 );
 router.post("/login", controller.login);
-router.get("/users",roleMiddleware(['Admin']), controller.getUsers);
+router.get("/users", roleMiddleware(["Admin"]), controller.getUsers);
+
+router.post("/create", authMiddleware, [
+  check("title", "Title cannot be empty").notEmpty(),
+  check("content", "Content cannot be empty").notEmpty(),
+], notesController.createNote);
 
 export default router;
