@@ -25,4 +25,10 @@ router.post("/create", authMiddleware, [
   check("content", "Content cannot be empty").notEmpty(),
 ], notesController.createNote);
 
+router.get("/notes", authMiddleware, notesController.getNoteDyUser);
+router.post("/update/:id", authMiddleware, notesController.updateNote);
+
+router.delete("/delete/:id", authMiddleware, notesController.deleteNote);
+router.put("/update/restore/:id", authMiddleware, notesController.restoreNote);
+
 export default router;
